@@ -12,15 +12,21 @@ script:
   - docker run -e CI=true marjugoncalves/multi-container-end-to-end-pipeline npm run test -- --coverage --watchAll=false
 
 after_success:
-  - docker build -t marjugoncalves/multi-client ./client
-  - docker build -t marjugoncalves/multi-nginx ./marjugoncalves/multi-nginx
-  - docker build -t marjugoncalves/multi-server ./marjugoncalves/multi-server
-  - docker build -t marjugoncalves/multi-worker ./worker
+
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  - docker build -t marjugoncalves/multi-client ./client
   - docker push marjugoncalves/multi-client
+
+  - docker build -t marjugoncalves/multi-nginx ./marjugoncalves/multi-nginx
   - docker push marjugoncalves/multi-nginx
+
+  - docker build -t marjugoncalves/multi-server ./marjugoncalves/multi-server
   - docker push marjugoncalves/multi-server
+
+  - docker build -t marjugoncalves/multi-worker ./worker
   - docker push marjugoncalves/multi-worker
+
 
 
 # deploy:
